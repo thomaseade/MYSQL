@@ -62,10 +62,10 @@ async function getAlumnosApuntadas(req, res) {
 async function getAsignaturasImpartidas(req, res) {
     const profesorId = req.query.id;
   
-    let sql = `SELECT s.title
-               FROM subjects s
-               INNER JOIN subject_teacher st ON s.subject_id = st.subject_id
-               WHERE st.teacher_id = ? `;
+    let sql = `SELECT subjects.title
+               FROM subjects
+               INNER JOIN subject_teacher ON subjects.subject_id = subject_teacher.subject_id
+               WHERE subject_teacher.teacher_id = ? `;
   
     try {
       const [result] = await pool.query(sql, [profesorId]);
@@ -77,10 +77,10 @@ async function getAsignaturasImpartidas(req, res) {
 
 
 async function getProfesoresYAsignaturasImpartidas(req, res) {
-    let sql = `SELECT t.first_name, t.last_name, s.title
-               FROM teachers t
-               INNER JOIN subject_teacher st ON t.teacher_id = st.teacher_id
-               INNER JOIN subjects s ON st.subject_id = s.subject_id`;
+    let sql = `  SELECT teachers.first_name, teachers.last_name, subjects.title
+                 FROM teachers
+                 INNER JOIN subject_teacher ON teachers.teacher_id = subject_teacher.teacher_id
+                 INNER JOIN subjects ON subject_teacher.subject_id = subjects.subject_id`;
   
     try {
       const [result] = await pool.query(sql);

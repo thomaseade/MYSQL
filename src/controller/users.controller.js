@@ -2,37 +2,27 @@ const { pool } =  require('../database');
 
 
 
-//obtener lista alumnos
+//obtener lista alumnos , id alumno
 
 
-async function getUser(req, res) { 
-    let sql ='SELECT * FROM students;'
-
-    if(req.query.usuario_id){
-        sql= `SELECT * FROM students WHERE student_id = ${req.query.student_id};`
+async function getUser(req, res) {
+    let sql = 'SELECT * FROM students';
+  
+    if (req.query.id) {
+      const studentId = req.query.id;
+      sql = `SELECT * FROM students WHERE student_id = ${studentId}`;
     }
-
+  
     try {
-        const [result] = await pool.query(sql)
-        res.send(result);
-
+      const [result] = await pool.query(sql);
+      res.send(result);
     } catch (error) {
-        res.send(error);
+      res.send(error);
     }
-};
+  }
 
-//Obtener alumnos
 
-async function getUserParams(req, res){
-    let sql=`SELECT * FROM students WHERE student_id = ${req.params.student_id};`
 
-    try{
-        const [result] = await pool.query(sql)
-        res.send(result);
-    } catch (error) { 
-        res.send(error);
-    }
-};
 
 
 
@@ -109,7 +99,6 @@ async function deleteUser(req, res) {
   
   module.exports = {
     getUser,
-    getUserParams,
     postUser,
     putUser,
     deleteUser,
